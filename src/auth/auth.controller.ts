@@ -20,6 +20,7 @@ export class AuthController {
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
+    delete user.password;
     return this.authService.login(user);
   }
 

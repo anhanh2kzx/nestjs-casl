@@ -72,4 +72,15 @@ export class RoleService {
       permissions: menu.permissions,
     }));
   }
+
+  async getMenusByRoleId(roleId: number) {
+    const role = await this.rolesRepository.findOne({
+      where: { id: roleId },
+      relations: ['menus'],
+    });
+    if (!role) {
+      throw new Error('Role not found');
+    }
+    return role.menus;
+  }
 }

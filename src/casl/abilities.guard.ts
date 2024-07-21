@@ -26,7 +26,7 @@ export class AbilitiesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<Request>();
 
-    const path = request.baseUrl;
+    const path = request.path;
 
     if (path.includes('/auth/login') || path.includes('/auth/register')) {
       return true;
@@ -40,9 +40,17 @@ export class AbilitiesGuard implements CanActivate {
 
     const ability = this.abilityFactory.createForUser(user);
 
-    return policyHandlers.every((handler) =>
+    // Log ability for debugging
+    console.log('User Ability:', ability);
+
+    // Evaluate policy handlers against user's ability
+    const allPoliciesPassed = policyHandlers.every((handler) =>
       this.execPolicyHandler(handler, ability),
     );
+
+    console.log('All Policies Passed:', allPoliciesPassed);
+
+    return allPoliciesPassed;
   }
 
   private execPolicyHandler(handler: PolicyHandler, ability: AppAbility) {

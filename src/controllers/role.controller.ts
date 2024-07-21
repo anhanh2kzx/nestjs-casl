@@ -57,4 +57,9 @@ export class RoleController {
   async getMenusAndPermissionsByRoleId(@Param('id') id: number) {
     return this.roleService.getListPermissionFromRole(id);
   }
+
+  @Get(':id/list-menu')
+  async getListMenuByRole(@Param('id') id: number) {
+    return this.roleService.getMenusByRoleId(id);
+  }
 }

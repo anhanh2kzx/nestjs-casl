@@ -33,7 +33,10 @@ export class UserService {
   }
 
   async validateUser(username: string, pass: string): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { username } });
+    const user = await this.usersRepository.findOne({
+      where: { username },
+      relations: ['roles', 'roles.menus', 'roles.menus.permissions'],
+    });
     if (user && (await bcrypt.compare(pass, user.password))) {
       return user;
     }

@@ -27,7 +27,7 @@ export class UserController {
 
   @Get('/test-permission')
   @UseGuards(AbilitiesGuard)
-  @CheckPolicies((ability) => ability.can(Action.Read, 'all'))
+  @CheckPolicies((ability) => ability.can(Action.Read, User))
   testPermission() {
     return 'This action returns all resources';
   }

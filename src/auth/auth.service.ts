@@ -6,6 +6,7 @@ import { User } from '../entities/user.entity';
 @Injectable()
 export class AuthService {
   private tokenBlacklist: Set<string> = new Set();
+
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
@@ -20,6 +21,7 @@ export class AuthService {
     const payload = { sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
+      user,
     };
   }
 

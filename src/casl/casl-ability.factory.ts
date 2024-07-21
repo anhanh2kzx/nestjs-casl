@@ -1,8 +1,10 @@
 import {
   AbilityBuilder,
   AbilityClass,
+  createMongoAbility,
   ExtractSubjectType,
   InferSubjects,
+  MongoAbility,
   PureAbility,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
@@ -14,6 +16,7 @@ import { Permission } from '../entities/permission.entity';
 type Subjects =
   | InferSubjects<typeof User | typeof Role | typeof Menu | typeof Permission>
   | 'all';
+
 export type AppAbility = PureAbility<[string, Subjects]>;
 
 @Injectable()
@@ -26,10 +29,15 @@ export class AbilityFactory {
     user.roles.forEach((role) => {
       role.menus.forEach((menu) => {
         menu.permissions.forEach((permission) => {
-          can(permission.name, 'all');
+          can(
+            permission.action,
+            permission.subject as ExtractSubjectType<Subjects>,
+          );
         });
       });
     });
+
+    // console.log(User.constructor === 'User');
 
     return build({
       detectSubjectType: (item) =>
